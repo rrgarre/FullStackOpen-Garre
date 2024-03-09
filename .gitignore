@@ -12,6 +12,7 @@ dist
 dist-ssr
 *.local
 Apuntes.md
+practica
 
 # Editor directories and files
 .vscode/*
