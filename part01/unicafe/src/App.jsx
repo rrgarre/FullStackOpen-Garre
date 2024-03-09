@@ -8,8 +8,13 @@ const Statistics = ({good, neutral, bad}) => {
   const positive = all > 0
     ? 100 * good / all
     : 0
-  console.log('** ', average)
-  
+  if(!all)
+    return (
+      <>
+        <h2>statistics</h2>
+        <p>No feedback given</p>
+      </>
+    )
   return(
     <>
       <h2>statistics</h2>
