@@ -8,16 +8,16 @@ const App = () => {
 
   const handleForm = (e) => {
     e.preventDefault()
-    setPersons(persons.concat({ name: newName}))
+    if(persons.find(person=>person.name.toLowerCase() === newName.toLowerCase())){
+      alert(`${newName} is already added to phonebook`)
+      return
+    }
+    setPersons(persons.concat({ name: newName }))
     setNewName('')
   }
   
   return (
     <div>
-      <div>
-        estado de newName: {newName}
-      </div>
-
       <h2>Phonebook</h2>
       <form onSubmit={handleForm}>
         <div>
