@@ -38,6 +38,16 @@ const App = () => {
       })
   }
 
+  const deletePerson = id => {
+    if(confirm(`Borrar la persona ${id}`)){
+      personService
+        .remove(id)
+        .then(response => {
+          setPersons(persons.filter(p => p.id !== id))
+        })
+    }
+  }
+
   const personsToShow = persons.filter((person) => {
     const currentName = person.name.toLowerCase()
     const currentSearch = search.toLowerCase() 
@@ -57,7 +67,10 @@ const App = () => {
         setNewNumber={setNewNumber} 
       />
       <h3>Numbers</h3>
-      <ListPersons personsToShow={personsToShow}/>
+      <ListPersons 
+        personsToShow={personsToShow}
+        deletePerson={deletePerson}
+      />
     </div>
   )
 }
