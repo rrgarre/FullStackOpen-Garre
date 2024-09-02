@@ -20,10 +20,20 @@ const App = () => {
 
   const handleForm = (e) => {
     e.preventDefault()
-    if(persons.find(person=>person.name.toLowerCase() === newName.toLowerCase())){
-      alert(`${newName} is already added to phonebook`)
+    // REPLACE NUMBER if already exists
+    const duplicatedPerson = persons.find(person=>person.name.toLowerCase() === newName.toLowerCase())
+    if(duplicatedPerson){
+      if(confirm(`${newName} is already added to phonebook, replace the old number with a new one?`)){
+        const changedPerson = {...duplicatedPerson, number: newNumber}
+        personService
+          .update(duplicatedPerson.id, changedPerson)
+          .then(addedPerson => {
+            setPersons(persons.map(p => p.id !== addedPerson.id ? p : addedPerson))
+          })
+      }
       return
     }
+    // or CREATE a new person
     const newPerson = {
       // id: persons.length + 1,
       name: newName,
