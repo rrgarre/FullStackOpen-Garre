@@ -2,13 +2,16 @@ import { useEffect, useState } from 'react'
 import Filter from './components/Filter'
 import FormNewPerson from './components/FormNewPerson'
 import ListPersons from './components/ListPersons'
+import Notification from './components/Notification'
 import personService from './services/persons'
+import './index.css'
 
 const App = () => {
   const [persons, setPersons] = useState([])
   const [newName, setNewName] = useState('')
   const [newNumber, setNewNumber] = useState('')
   const [search, setSearch] = useState('')
+  const [confirmMessage, setConfirmMessage] = useState(null)
 
   useEffect(()=>{
     personService
@@ -29,6 +32,8 @@ const App = () => {
           .update(duplicatedPerson.id, changedPerson)
           .then(addedPerson => {
             setPersons(persons.map(p => p.id !== addedPerson.id ? p : addedPerson))
+            setConfirmMessage(`Edited ${newNumber} for ${newName}`)
+            hideMessage()
           })
       }
       return
@@ -45,6 +50,8 @@ const App = () => {
         setPersons(persons.concat(addedPerson))
         setNewName('')
         setNewNumber('')
+        setConfirmMessage(`Added ${newName}`)
+        hideMessage()
       })
   }
 
@@ -63,10 +70,17 @@ const App = () => {
     const currentSearch = search.toLowerCase() 
     return currentName.includes(currentSearch)
   })
+
+  const hideMessage = () => {
+    setTimeout(() => {
+      setConfirmMessage(null)
+    }, 4000);
+  }
   
   return (
     <div>
       <h2>Phonebook</h2>
+      <Notification message={confirmMessage}/>
       <Filter search={search} setSearch={setSearch} />
       <h3>add a new</h3>
       <FormNewPerson
