@@ -20,10 +20,10 @@ const remove = id => {
 }
 
 const update = (id, changedPerson) => {
-  console.log('desde update person: id: ', id)
   return axios
     .put(`${baseUrl}/${id}`, changedPerson)
     .then(response => response.data)
+    // .catch(error => error.message)
 }
 
 export default { getAll, create, remove, update }

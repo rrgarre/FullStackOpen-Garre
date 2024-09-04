@@ -12,6 +12,7 @@ const App = () => {
   const [newNumber, setNewNumber] = useState('')
   const [search, setSearch] = useState('')
   const [confirmMessage, setConfirmMessage] = useState(null)
+  const [isError , setIsError] = useState(false)
 
   useEffect(()=>{
     personService
@@ -26,13 +27,20 @@ const App = () => {
     // REPLACE NUMBER if already exists
     const duplicatedPerson = persons.find(person=>person.name.toLowerCase() === newName.toLowerCase())
     if(duplicatedPerson){
-      if(confirm(`${newName} is already added to phonebook, replace the old number with a new one?`)){
+      if(confirm(`${duplicatedPerson.name} is already added to phonebook, replace the old number with a new one?`)){
         const changedPerson = {...duplicatedPerson, number: newNumber}
         personService
           .update(duplicatedPerson.id, changedPerson)
           .then(addedPerson => {
             setPersons(persons.map(p => p.id !== addedPerson.id ? p : addedPerson))
+            setIsError(false)
             setConfirmMessage(`Edited ${newNumber} for ${newName}`)
+            hideMessage()
+          })
+          .catch(error => {
+            setPersons(persons.filter(p => p.name !== duplicatedPerson.name))
+            setIsError(true)
+            setConfirmMessage(`Information of ${newName} has already been removed from server`)
             hideMessage()
           })
       }
@@ -50,6 +58,7 @@ const App = () => {
         setPersons(persons.concat(addedPerson))
         setNewName('')
         setNewNumber('')
+        setIsError(false)
         setConfirmMessage(`Added ${newName}`)
         hideMessage()
       })
@@ -80,7 +89,7 @@ const App = () => {
   return (
     <div>
       <h2>Phonebook</h2>
-      <Notification message={confirmMessage}/>
+      <Notification message={confirmMessage} isError={isError} />
       <Filter search={search} setSearch={setSearch} />
       <h3>add a new</h3>
       <FormNewPerson

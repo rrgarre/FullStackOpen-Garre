@@ -1,7 +1,7 @@
 const Filter = ({search, setSearch}) => {
   return (
     <div>
-      <input value={search} onChange={(e)=>setSearch(e.target.value)} />
+      Filter shown with <input value={search} onChange={(e)=>setSearch(e.target.value)} />
     </div>
   )
 }
