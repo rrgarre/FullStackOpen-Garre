@@ -2,3 +2,8 @@
   max-height: 10em;
   width: auto;  
 }
+
+.weather-icon {
+  height: 5em;
+  width: auto;
+}

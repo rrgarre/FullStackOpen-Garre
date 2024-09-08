@@ -1,4 +1,17 @@
+import { useEffect, useState } from 'react'
+import weatherService from '../services/weather'
+import Weather from './Weather'
+
 const CountryDetail = ({country}) => {
+
+  const [weather, setWeather] = useState(null)
+
+  useEffect(()=>{
+    weatherService
+      .getCountryInfo(country.capital[0])
+      .then(weatherInfo => setWeather(weatherInfo))
+  },[])
+
   const langs = []
   for (let clave in country.languages) {       
     let valor = country.languages[clave]
@@ -16,8 +29,12 @@ const CountryDetail = ({country}) => {
           langs.map(lang => <li key={lang}>{lang}</li>)
         }
       </ul>
-
       <img className="flag" src={country.flags.png} />
+      {
+        weather !== null
+          ? <Weather weatherInfo={weather} />
+          : ''
+      }
     </>
   )
 }
