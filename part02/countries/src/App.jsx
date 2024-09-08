@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import countryService from './services/countries'
 import Filter from './components/Filter'
 import CountryDetail from './components/CountryDetail'
+import ListCountries from './components/ListCountries'
 import './index.css'
 
 const App = () => {
@@ -24,6 +25,9 @@ const App = () => {
     return currentCountry.includes(countryToSearch)
   })
 
+  const handleSelectCountry = (countryName) => setSearch(countryName)
+
+
   if(countriesToShow.length === 1)
     return(
       <>
@@ -45,7 +49,10 @@ const App = () => {
       {
         countriesToShow.length >= 10
           ? <p>Too many matches, specify another filter</p>
-          : countriesToShow.map(country => <p key={country.cca2}>{country.name.common}</p>)
+          : <ListCountries 
+              countriesToShow={countriesToShow}
+              handleSelectCountry={handleSelectCountry}
+            />
       }
     </>
   )
